@@ -41,7 +41,7 @@ async def wallet_db(tg_id, wallet, user_name):
 
 async def verify_db(tg_id, verify, user_name):
     async with aiosqlite.connect('verify.db') as db:
-        await db.execute('CREATE TABLE IF NOT EXISTS users_verify (tg_id BIGINT, verify INT, user_name STRING)')
+        await db.execute('CREATE TABLE IF NOT EXISTS users_verify (id INTEGER PRIMARY KEY AUTOINCREMENT, tg_id BIGINT, verify INT, user_name STRING)')
         cursor = await db.execute('SELECT * FROM users_verify WHERE tg_id =?', (tg_id,))
         data = await cursor.fetchone()
         if data is not None:
