@@ -27,6 +27,8 @@ admin_menu = ('''
 5. кошелек x (x - имя пользователя, выводит баланс пользователя\n
 6. остаток (показывает остатки в магазине)\n
 7. откуда узнал (показывает статистику откуда пользователи узнали про бота
+8. рассылка x (x - сообщение для всех пользователей бота. Пример - рассылка Это текст для рассылки(бот отправит всем пользователям "Это текст для рассылки")
+Все команды можно писать с большой и маленькой буквы, но тест команды должен быть именно в том порядке, в каком они написаны тут:)
 
 Команды 1,2,3,4 добавлены на всякий случай, если что-то пойдет не так, надобности их использования нет, вся их работа делается автоматически
 ''')
@@ -794,13 +796,17 @@ async def balance(message: Message, bot: Bot) -> None:
                                                 f'\nСертификат на кофе: {sh25}')
     else:await bot.send_message(message.chat.id, 'Жулик, не воруй!')
 
-# @router.message(F.text.lower().contains('test'))
-# async def wallet_change(message: Message, bot: Bot) -> None:
-#     if message.from_user.id in ADMIN:
-#         db = await aiosqlite.connect('verify.db')
-#         cursor = await db.execute(f'SELECT tg_id FROM users_verify')
-#         data = await cursor.fetchone()
-#         await bot.send_message(message.chat.id, f'{data}')
 
-
-# сделать рассылку
+@router.message(F.text.lower().contains('рассылка'))
+async def news(message: Message, bot: Bot) -> None:
+    if message.from_user.id in ADMIN:
+        text = message.text[9:]
+        db = await aiosqlite.connect('verify.db')
+        cursor = await db.execute(f'SELECT tg_id FROM users_verify')
+        users = await cursor.fetchall()
+        for id in users:
+            try:
+                await bot.send_message(id[0], f'{text}')
+            except:
+                pass
+    else:await bot.send_message(message.chat.id, 'Жулик, не воруй!')
