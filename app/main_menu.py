@@ -735,10 +735,10 @@ async def shop_main(callback_query: types.CallbackQuery, bot: Bot) -> None:
 
 
 @router.message(F.text=="Задать вопрос")
-async def shop_main(message: Message, callback_query: types.CallbackQuery, bot: Bot, state: FSMContext) -> None:
+async def shop_main(message: Message, bot: Bot, state: FSMContext) -> None:
     if datetime.time(hour=8, minute=59) < datetime.datetime.now().time() < datetime.time(hour=21, minute=0):
         await bot.send_message(message.from_user.id,f'Задай свой вопрос, тебе поможет первый освободившийся модератор!')
-        await set_state(Form.question)
+        await state.set_state(Form.question)
     else:
         await bot.send_message(message.from_user.id, 'Бот спит, приходи с 9:00 до 21:00, в его рабочее время')
 
@@ -748,6 +748,7 @@ async def subs_res(message: Message, bot: Bot, state: FSMContext) -> None:
     await state.update_data(question=message.from_user)
     await bot.forward_message(chat_id=-1002250236179, message_id=message.message_id, from_chat_id=message.chat.id)
     await bot.send_message(chat_id=-1002250236179, text=f'@{message.from_user.username} прислал вопрос, помогите ему!')
+    await state.clear()
 # @router.message(F.text=='friend')
 # async def friend(message: Message, bot: Bot, state: FSMContext) -> None:
 #     if datetime.time(hour=8, minute=59) < datetime.datetime.now().time() < datetime.time(hour=21, minute=0):
