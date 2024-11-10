@@ -424,9 +424,9 @@ async def friend(callback_query: types.CallbackQuery, bot: Bot) -> None:
 
 
 @router.message(F.text=="Об отрядах")
-async def faq_main(callback_query: types.CallbackQuery, bot: Bot) -> None:
+async def faq_main(message: Message, bot: Bot) -> None:
     if datetime.time(hour=8, minute=59) < datetime.datetime.now().time() < datetime.time(hour=21, minute=0):
-        await bot.send_message(callback_query.from_user.id,f'{about}',
+        await bot.send_message(message.from_user.id,f'{about}',
                                reply_markup=squads_menu())
     else:
         await bot.send_message(message.from_user.id, 'Бот спит, приходи с 9:00 до 21:00, в его рабочее время')
@@ -691,13 +691,13 @@ async def selling(callback_query: types.CallbackQuery, bot: Bot) -> None:
 
 
 @router.message(F.text=="Задания")
-async def quests_main(message: Message, callback_query: types.CallbackQuery, bot: Bot) -> None:
+async def quests_main(message: Message, bot: Bot) -> None:
     if datetime.time(hour=8, minute=59) < datetime.datetime.now().time() < datetime.time(hour=21, minute=0):
         if datetime.datetime.now() > datetime.datetime(2024, 11, 10) or datetime.datetime(2024, 11, 9) > datetime.datetime.today() > datetime.datetime(2024, 11, 4):
-            await bot.send_message(callback_query.from_user.id, 'Ты можешь выполнить общие и профильные задания.\nКакие выбираешь?',
+            await bot.send_message(message.from_user.id, 'Ты можешь выполнить общие и профильные задания.\nКакие выбираешь?',
                                    reply_markup=get_type_of_quest_inout())
         else:
-            await bot.send_message(callback_query.from_user.id, 'Задания будут доступны с 11 ноября')
+            await bot.send_message(message.from_user.id, 'Задания будут доступны с 11 ноября')
     else:
         await bot.send_message(message.from_user.id, 'Бот спит, приходи с 9:00 до 21:00, в его рабочее время')
 
@@ -710,11 +710,11 @@ async def wallet_main(message: Message, bot: Bot) -> None:
 
 
 @router.message(F.text=="Анкета")
-async def shop_main(callback_query: types.CallbackQuery, bot: Bot) -> None:
+async def shop_main(message: Message, bot: Bot) -> None:
     anketat = ('Надеемся, что ты ознакомился с профилями отрядов перед заполнением анкеты. Скорее заполняй заявку!'
                '\nНе упустите свой шанс стать частью нашего большого сообщества!')
     if datetime.time(hour=8, minute=59) < datetime.datetime.now().time() < datetime.time(hour=21, minute=0):
-        await bot.send_message(callback_query.from_user.id,f'{anketat}', reply_markup=anketa())
+        await bot.send_message(message.from_user.id,f'{anketat}', reply_markup=anketa())
     else:
         await bot.send_message(message.from_user.id, 'Бот спит, приходи с 9:00 до 21:00, в его рабочее время')
 
@@ -727,9 +727,9 @@ rasp = ('Задания можно выполнять не только онла
             '\n\nЧетверг — знакомство со студенчискими отрядами СПО Орбита и СМедО АТОМ, выполнение общих и профильных заданий отярдов.'
             '\n\nПятница  — открытие магазина, концерт и розыгрыш подарков.')
 @router.message(F.text=="Расписание")
-async def shop_main(callback_query: types.CallbackQuery, bot: Bot) -> None:
+async def shop_main(message: Message, bot: Bot) -> None:
     if datetime.time(hour=8, minute=59) < datetime.datetime.now().time() < datetime.time(hour=21, minute=0):
-        await bot.send_message(callback_query.from_user.id,f'{rasp}')
+        await bot.send_message(message.from_user.id,f'{rasp}')
     else:
         await bot.send_message(message.from_user.id, 'Бот спит, приходи с 9:00 до 21:00, в его рабочее время')
 
